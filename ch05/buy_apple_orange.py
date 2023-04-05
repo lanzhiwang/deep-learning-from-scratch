@@ -22,7 +22,8 @@ price = mul_tax_layer.forward(all_price, tax)  # (4)
 # backward
 dprice = 1
 dall_price, dtax = mul_tax_layer.backward(dprice)  # (4)
-dapple_price, dorange_price = add_apple_orange_layer.backward(dall_price)  # (3)
+dapple_price, dorange_price = add_apple_orange_layer.backward(
+    dall_price)  # (3)
 dorange, dorange_num = mul_orange_layer.backward(dorange_price)  # (2)
 dapple, dapple_num = mul_apple_layer.backward(dapple_price)  # (1)
 

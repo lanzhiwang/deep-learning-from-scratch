@@ -1,5 +1,6 @@
 # coding: utf-8
 import sys, os
+
 sys.path.append(os.pardir)  # 为了导入父目录的文件而进行的设定
 import numpy as np
 import matplotlib.pyplot as plt
@@ -12,14 +13,14 @@ def f(x, y):
 
 
 def df(x, y):
-    return x / 10.0, 2.0*y
+    return x / 10.0, 2.0 * y
+
 
 init_pos = (-7.0, 2.0)
 params = {}
 params['x'], params['y'] = init_pos[0], init_pos[1]
 grads = {}
 grads['x'], grads['y'] = 0, 0
-
 
 optimizers = OrderedDict()
 optimizers["SGD"] = SGD(lr=0.95)
@@ -34,26 +35,25 @@ for key in optimizers:
     x_history = []
     y_history = []
     params['x'], params['y'] = init_pos[0], init_pos[1]
-    
+
     for i in range(30):
         x_history.append(params['x'])
         y_history.append(params['y'])
-        
+
         grads['x'], grads['y'] = df(params['x'], params['y'])
         optimizer.update(params, grads)
-    
 
     x = np.arange(-10, 10, 0.01)
     y = np.arange(-5, 5, 0.01)
-    
-    X, Y = np.meshgrid(x, y) 
+
+    X, Y = np.meshgrid(x, y)
     Z = f(X, Y)
-    
-    # for simple contour line  
+
+    # for simple contour line
     mask = Z > 7
     Z[mask] = 0
-    
-    # plot 
+
+    # plot
     plt.subplot(2, 2, idx)
     idx += 1
     plt.plot(x_history, y_history, 'o-', color="red")
@@ -66,5 +66,5 @@ for key in optimizers:
     plt.title(key)
     plt.xlabel("x")
     plt.ylabel("y")
-    
+
 plt.show()
