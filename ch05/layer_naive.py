@@ -1,6 +1,7 @@
 # coding: utf-8
 
 
+# 乘法层
 class MulLayer:
 
     def __init__(self):
@@ -21,6 +22,7 @@ class MulLayer:
         return dx, dy
 
 
+# 加法层
 class AddLayer:
 
     def __init__(self):

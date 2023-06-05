@@ -13,23 +13,33 @@ def _numerical_gradient_no_batch(f, x):
         tmp_val = x[idx]
         x[idx] = float(tmp_val) + h
         fxh1 = f(x)  # f(x+h)
-
         x[idx] = tmp_val - h
         fxh2 = f(x)  # f(x-h)
         grad[idx] = (fxh1 - fxh2) / (2 * h)
-
         x[idx] = tmp_val  # 还原值
 
     return grad
 
 
 def numerical_gradient(f, X):
+    # print(X)
+    # [[-2 -1  0  1 -2 -1  0  1 -2 -1  0  1 -2 -1  0  1]
+    #  [-2 -2 -2 -2 -1 -1 -1 -1  0  0  0  0  1  1  1  1]]
+    # print(X.shape)  # (2, 16)
     if X.ndim == 1:
         return _numerical_gradient_no_batch(f, X)
     else:
         grad = np.zeros_like(X)
+        # print(grad)
+        # [[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+        #  [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]]
+        # print(grad.shape)  # (2, 16)
 
         for idx, x in enumerate(X):
+            # print(idx, x)
+            # 0 [-2 -1  0  1 -2 -1  0  1 -2 -1  0  1 -2 -1  0  1]
+            # 1 [-2 -2 -2 -2 -1 -1 -1 -1  0  0  0  0  1  1  1  1]
+
             grad[idx] = _numerical_gradient_no_batch(f, x)
 
         return grad
@@ -50,12 +60,33 @@ def tangent_line(f, x):
 
 
 if __name__ == '__main__':
-    x0 = np.arange(-2, 2.5, 0.25)
-    x1 = np.arange(-2, 2.5, 0.25)
+    x0 = np.arange(-2, 2, 1)
+    # print("x0:", x0)
+    # x0: [-2 -1  0  1]
+
+    x1 = np.arange(-2, 2, 1)
+    # print("x1:", x1)
+    # x1: [-2 -1  0  1]
+
     X, Y = np.meshgrid(x0, x1)
+    # print("X:", X)
+    # X: [[-2 -1  0  1]
+    #     [-2 -1  0  1]
+    #     [-2 -1  0  1]
+    #     [-2 -1  0  1]]
+
+    # print("Y:", Y)
+    # Y: [[-2 -2 -2 -2]
+    #     [-1 -1 -1 -1]
+    #     [ 0  0  0  0]
+    #     [ 1  1  1  1]]
 
     X = X.flatten()
     Y = Y.flatten()
+    # print("X:", X)
+    # X: [-2 -1  0  1 -2 -1  0  1 -2 -1  0  1 -2 -1  0  1]
+    # print("Y:", Y)
+    # Y: [-2 -2 -2 -2 -1 -1 -1 -1  0  0  0  0  1  1  1  1]
 
     grad = numerical_gradient(function_2, np.array([X, Y]))
 

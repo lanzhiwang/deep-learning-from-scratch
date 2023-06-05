@@ -7,6 +7,25 @@ def step_function(x):
     return np.array(x > 0, dtype=np.int)
 
 
+# >>> import numpy as np
+# >>> x = np.array([-1.0, 1.0, 2.0])
+# >>> x
+# array([-1.,  1.,  2.])
+# >>> y = x > 0
+# >>> y
+# array([False,  True,  True])
+# >>> y = y.astype(np.int)
+# >>> y
+# array([0, 1, 1])
+# >>>
+
+# >>> import numpy as np
+# >>> x = np.array([-1.0, 1.0, 2.0])
+# >>> y = np.array(x > 0, dtype=np.int)
+# >>> y
+# array([0, 1, 1])
+# >>>
+
 X = np.arange(-5.0, 5.0, 0.1)
 Y = step_function(X)
 plt.plot(X, Y)

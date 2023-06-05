@@ -12,9 +12,16 @@ from two_layer_net import TwoLayerNet
                                                   one_hot_label=True)
 
 network = TwoLayerNet(input_size=784, hidden_size=50, output_size=10)
+print(network.params['W1'].shape)  # (784, 50)
+print(network.params['b1'].shape)  # (50,)
+print(network.params['W2'].shape)  # (50, 10)
+print(network.params['b2'].shape)  # (10,)
 
 iters_num = 10000  # 适当设定循环的次数
 train_size = x_train.shape[0]
+print("train_size:", train_size)
+# train_size: 60000
+
 batch_size = 100
 learning_rate = 0.1
 
@@ -23,15 +30,20 @@ train_acc_list = []
 test_acc_list = []
 
 iter_per_epoch = max(train_size / batch_size, 1)
+print("iter_per_epoch:", iter_per_epoch)
+# iter_per_epoch: 600.0
 
 for i in range(iters_num):
     batch_mask = np.random.choice(train_size, batch_size)
+    print(batch_mask.shape)  # (100,)
     x_batch = x_train[batch_mask]
     t_batch = t_train[batch_mask]
+    print(x_batch.shape)  # (100, 784)
+    print(x_batch.shape)  # (100, 784)
 
     # 计算梯度
-    #grad = network.numerical_gradient(x_batch, t_batch)
-    grad = network.gradient(x_batch, t_batch)
+    grad = network.numerical_gradient(x_batch, t_batch)
+    # grad = network.gradient(x_batch, t_batch)
 
     # 更新参数
     for key in ('W1', 'b1', 'W2', 'b2'):
@@ -47,13 +59,13 @@ for i in range(iters_num):
         test_acc_list.append(test_acc)
         print("train acc, test acc | " + str(train_acc) + ", " + str(test_acc))
 
-# 绘制图形
-markers = {'train': 'o', 'test': 's'}
-x = np.arange(len(train_acc_list))
-plt.plot(x, train_acc_list, label='train acc')
-plt.plot(x, test_acc_list, label='test acc', linestyle='--')
-plt.xlabel("epochs")
-plt.ylabel("accuracy")
-plt.ylim(0, 1.0)
-plt.legend(loc='lower right')
-plt.show()
+# # 绘制图形
+# markers = {'train': 'o', 'test': 's'}
+# x = np.arange(len(train_acc_list))
+# plt.plot(x, train_acc_list, label='train acc')
+# plt.plot(x, test_acc_list, label='test acc', linestyle='--')
+# plt.xlabel("epochs")
+# plt.ylabel("accuracy")
+# plt.ylim(0, 1.0)
+# plt.legend(loc='lower right')
+# plt.show()

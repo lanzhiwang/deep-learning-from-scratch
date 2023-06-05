@@ -41,6 +41,7 @@ class Sigmoid:
 
 class Affine:
 
+    # Affine(self.params['W1'], self.params['b1'])
     def __init__(self, W, b):
         self.W = W
         self.b = b
@@ -77,6 +78,7 @@ class SoftmaxWithLoss:
         self.y = None  # softmax的输出
         self.t = None  # 监督数据
 
+    # forward(y, t)
     def forward(self, x, t):
         self.t = t
         self.y = softmax(x)
