@@ -210,6 +210,7 @@ class BatchNormalization:
         return dx
 
 
+# 卷积层
 class Convolution:
 
     def __init__(self, W, b, stride=1, pad=0):
@@ -259,6 +260,7 @@ class Convolution:
         return dx
 
 
+# 池化层
 class Pooling:
 
     def __init__(self, pool_h, pool_w, stride=1, pad=0):

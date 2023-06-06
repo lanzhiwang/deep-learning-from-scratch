@@ -5,7 +5,7 @@ import numpy as np
 def smooth_curve(x):
     """用于使损失函数的图形变圆滑
 
-    参考：http://glowingpython.blogspot.jp/2012/02/convolution-with-numpy.html
+    参考: http://glowingpython.blogspot.jp/2012/02/convolution-with-numpy.html
     """
     window_len = 11
     s = np.r_[x[window_len - 1:0:-1], x, x[-1:-window_len:-1]]
@@ -37,6 +37,7 @@ def conv_output_size(input_size, filter_size, stride=1, pad=0):
     return (input_size + 2 * pad - filter_size) / stride + 1
 
 
+# 卷积层
 def im2col(input_data, filter_h, filter_w, stride=1, pad=0):
     """
 
@@ -76,7 +77,7 @@ def col2im(col, input_shape, filter_h, filter_w, stride=1, pad=0):
     Parameters
     ----------
     col :
-    input_shape : 输入数据的形状（例：(10, 1, 28, 28)）
+    input_shape : 输入数据的形状（例：(10, 1, 28, 28))
     filter_h :
     filter_w
     stride

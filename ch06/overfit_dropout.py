@@ -10,10 +10,18 @@ from common.multi_layer_net_extend import MultiLayerNetExtend
 from common.trainer import Trainer
 
 (x_train, t_train), (x_test, t_test) = load_mnist(normalize=True)
+# print(x_train.shape)
+# print(t_train.shape)
+# (60000, 784)
+# (60000,)
 
 # 为了再现过拟合，减少学习数据
 x_train = x_train[:300]
 t_train = t_train[:300]
+# print(x_train.shape)
+# print(t_train.shape)
+# (300, 784)
+# (300,)
 
 # 设定是否使用Dropuout，以及比例 ========================
 use_dropout = True  # 不使用Dropout的情况下为False

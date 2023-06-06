@@ -13,14 +13,14 @@ class MultiLayerNet:
 
     Parameters
     ----------
-    input_size : 输入大小（MNIST的情况下为784）
-    hidden_size_list : 隐藏层的神经元数量的列表（e.g. [100, 100, 100]）
-    output_size : 输出大小（MNIST的情况下为10）
+    input_size : 输入大小(MNIST的情况下为784)
+    hidden_size_list : 隐藏层的神经元数量的列表(e.g. [100, 100, 100])
+    output_size : 输出大小(MNIST的情况下为10)
     activation : 'relu' or 'sigmoid'
-    weight_init_std : 指定权重的标准差（e.g. 0.01）
+    weight_init_std : 指定权重的标准差(e.g. 0.01)
         指定'relu'或'he'的情况下设定“He的初始值”
         指定'sigmoid'或'xavier'的情况下设定“Xavier的初始值”
-    weight_decay_lambda : Weight Decay（L2范数）的强度
+    weight_decay_lambda : Weight Decay(L2范数)的强度
     """
 
     def __init__(self,
@@ -44,16 +44,52 @@ class MultiLayerNet:
         activation_layer = {'sigmoid': Sigmoid, 'relu': Relu}
         self.layers = OrderedDict()
         for idx in range(1, self.hidden_layer_num + 1):
+            # print("idx:", idx)
             self.layers['Affine' + str(idx)] = Affine(
                 self.params['W' + str(idx)], self.params['b' + str(idx)])
             self.layers['Activation_function' +
                         str(idx)] = activation_layer[activation]()
+        # print(self.layers)
 
         idx = self.hidden_layer_num + 1
         self.layers['Affine' + str(idx)] = Affine(self.params['W' + str(idx)],
                                                   self.params['b' + str(idx)])
+        # print(self.layers)
 
         self.last_layer = SoftmaxWithLoss()
+        # print(self.last_layer)
+        '''
+        idx: 1
+        idx: 2
+        idx: 3
+        idx: 4
+        OrderedDict(
+            [
+                ('Affine1', <common.layers.Affine object at 0x7fae1f8e7e50>),
+                ('Activation_function1', <common.layers.Relu object at 0x7fade0b37130>),
+                ('Affine2', <common.layers.Affine object at 0x7fade0b373d0>),
+                ('Activation_function2', <common.layers.Relu object at 0x7fade0b37760>),
+                ('Affine3', <common.layers.Affine object at 0x7fade0b378e0>),
+                ('Activation_function3', <common.layers.Relu object at 0x7fade0b37910>),
+                ('Affine4', <common.layers.Affine object at 0x7fade0b37970>),
+                ('Activation_function4', <common.layers.Relu object at 0x7fade0b379a0>)
+            ]
+        )
+        OrderedDict(
+            [
+                ('Affine1', <common.layers.Affine object at 0x7fae1f8e7e50>),
+                ('Activation_function1', <common.layers.Relu object at 0x7fade0b37130>),
+                ('Affine2', <common.layers.Affine object at 0x7fade0b373d0>),
+                ('Activation_function2', <common.layers.Relu object at 0x7fade0b37760>),
+                ('Affine3', <common.layers.Affine object at 0x7fade0b378e0>),
+                ('Activation_function3', <common.layers.Relu object at 0x7fade0b37910>),
+                ('Affine4', <common.layers.Affine object at 0x7fade0b37970>),
+                ('Activation_function4', <common.layers.Relu object at 0x7fade0b379a0>),
+                ('Affine5', <common.layers.Affine object at 0x7fade0b371f0>)
+            ]
+        )
+        <common.layers.SoftmaxWithLoss object at 0x7f9b9b91ba00>
+        '''
 
     def __init_weight(self, weight_init_std):
         """设定权重的初始值
@@ -66,7 +102,10 @@ class MultiLayerNet:
         """
         all_size_list = [self.input_size
                          ] + self.hidden_size_list + [self.output_size]
-        for idx in range(1, len(all_size_list)):
+        # print("all_size_list:", all_size_list)
+
+        for idx in range(1, len(all_size_list)):  # 1 2 3 4 5
+            # print("idx:", idx)
             scale = weight_init_std
             if str(weight_init_std).lower() in ('relu', 'he'):
                 scale = np.sqrt(2.0 /
@@ -74,10 +113,36 @@ class MultiLayerNet:
             elif str(weight_init_std).lower() in ('sigmoid', 'xavier'):
                 scale = np.sqrt(1.0 /
                                 all_size_list[idx - 1])  # 使用sigmoid的情况下推荐的初始值
+            # print("scale:", scale)
+            # print('W' + str(idx))
+            # print('b' + str(idx))
 
             self.params['W' + str(idx)] = scale * np.random.randn(
                 all_size_list[idx - 1], all_size_list[idx])
             self.params['b' + str(idx)] = np.zeros(all_size_list[idx])
+        '''
+        all_size_list: [784, 100, 100, 100, 100, 10]
+        idx: 1
+        scale: 0.050507627227610534
+        W1
+        b1
+        idx: 2
+        scale: 0.1414213562373095
+        W2
+        b2
+        idx: 3
+        scale: 0.1414213562373095
+        W3
+        b3
+        idx: 4
+        scale: 0.1414213562373095
+        W4
+        b4
+        idx: 5
+        scale: 0.1414213562373095
+        W5
+        b5
+        '''
 
     def predict(self, x):
         for layer in self.layers.values():
@@ -174,3 +239,25 @@ class MultiLayerNet:
             grads['b' + str(idx)] = self.layers['Affine' + str(idx)].db
 
         return grads
+
+
+if __name__ == "__main__":
+    networks = MultiLayerNet(input_size=784,
+                             hidden_size_list=[100, 100, 100, 100],
+                             output_size=10)
+
+    print(networks.input_size)  # 784
+    print(networks.output_size)  # 10
+    print(networks.hidden_size_list)  # [100, 100, 100, 100]
+    print(networks.hidden_layer_num)  # 4
+    print(networks.weight_decay_lambda)  # 0
+    print(networks.params["W1"].shape)  # (784, 100)
+    print(networks.params["b1"].shape)  # (100,)
+    print(networks.params["W2"].shape)  # (100, 100)
+    print(networks.params["b2"].shape)  # (100,)
+    print(networks.params["W3"].shape)  # (100, 100)
+    print(networks.params["b3"].shape)  # (100,)
+    print(networks.params["W4"].shape)  # (100, 100)
+    print(networks.params["b4"].shape)  # (100,)
+    print(networks.params["W5"].shape)  # (100, 10)
+    print(networks.params["b5"].shape)  # (10,)

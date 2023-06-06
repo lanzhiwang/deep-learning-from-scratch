@@ -22,15 +22,15 @@ class Trainer:
                  optimizer_param={'lr': 0.01},
                  evaluate_sample_num_per_epoch=None,
                  verbose=True):
-        self.network = network
-        self.verbose = verbose
-        self.x_train = x_train
-        self.t_train = t_train
-        self.x_test = x_test
-        self.t_test = t_test
-        self.epochs = epochs
-        self.batch_size = mini_batch_size
-        self.evaluate_sample_num_per_epoch = evaluate_sample_num_per_epoch
+        self.network = network  # <common.multi_layer_net_extend.MultiLayerNetExtend object at 0x7f445f227fa0>
+        self.verbose = verbose  # True
+        self.x_train = x_train  # (300, 784)
+        self.t_train = t_train  # (300,)
+        self.x_test = x_test  # (10000, 784)
+        self.t_test = t_test  # (10000,)
+        self.epochs = epochs  # 301
+        self.batch_size = mini_batch_size  # 100
+        self.evaluate_sample_num_per_epoch = evaluate_sample_num_per_epoch  # None
 
         # optimzer
         optimizer_class_dict = {
@@ -42,11 +42,12 @@ class Trainer:
             'adam': Adam
         }
         self.optimizer = optimizer_class_dict[optimizer.lower()](
-            **optimizer_param)
+            **
+            optimizer_param)  # <common.optimizer.SGD object at 0x7f441e7c1ba0>
 
-        self.train_size = x_train.shape[0]
-        self.iter_per_epoch = max(self.train_size / mini_batch_size, 1)
-        self.max_iter = int(epochs * self.iter_per_epoch)
+        self.train_size = x_train.shape[0]  # 300
+        self.iter_per_epoch = max(self.train_size / mini_batch_size, 1)  # 3.0
+        self.max_iter = int(epochs * self.iter_per_epoch)  # 903
         self.current_iter = 0
         self.current_epoch = 0
 

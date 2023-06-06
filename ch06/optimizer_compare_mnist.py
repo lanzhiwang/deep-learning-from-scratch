@@ -31,6 +31,16 @@ for key in optimizers.keys():
                                   hidden_size_list=[100, 100, 100, 100],
                                   output_size=10)
     train_loss[key] = []
+# print("networks:", networks)
+# print("train_loss:", train_loss)
+# networks:
+# {
+#     'SGD': <common.multi_layer_net.MultiLayerNet object at 0x7f2e38d1ffd0>,
+#     'Momentum': <common.multi_layer_net.MultiLayerNet object at 0x7f2e38d1ff40>,
+#     'AdaGrad': <common.multi_layer_net.MultiLayerNet object at 0x7f2e38d1f7f0>,
+#     'Adam': <common.multi_layer_net.MultiLayerNet object at 0x7f2e38d1f550>
+# }
+# train_loss: {'SGD': [], 'Momentum': [], 'AdaGrad': [], 'Adam': []}
 
 # 2:开始训练==========
 for i in range(max_iterations):

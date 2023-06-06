@@ -13,14 +13,14 @@ class SimpleConvNet:
     """简单的ConvNet
 
     conv - relu - pool - affine - relu - affine - softmax
-    
+
     Parameters
     ----------
-    input_size : 输入大小（MNIST的情况下为784）
-    hidden_size_list : 隐藏层的神经元数量的列表（e.g. [100, 100, 100]）
-    output_size : 输出大小（MNIST的情况下为10）
+    input_size : 输入大小(MNIST的情况下为784)
+    hidden_size_list : 隐藏层的神经元数量的列表(e.g. [100, 100, 100])
+    output_size : 输出大小(MNIST的情况下为10)
     activation : 'relu' or 'sigmoid'
-    weight_init_std : 指定权重的标准差（e.g. 0.01）
+    weight_init_std : 指定权重的标准差(e.g. 0.01)
         指定'relu'或'he'的情况下设定“He的初始值”
         指定'sigmoid'或'xavier'的情况下设定“Xavier的初始值”
     """
@@ -37,14 +37,34 @@ class SimpleConvNet:
                  output_size=10,
                  weight_init_std=0.01):
         filter_num = conv_param['filter_num']
+        # print("filter_num:", filter_num)
+        # filter_num: 30
+
         filter_size = conv_param['filter_size']
+        # print("filter_size:", filter_size)
+        # filter_size: 5
+
         filter_pad = conv_param['pad']
+        # print("filter_pad:", filter_pad)
+        # filter_pad: 0
+
         filter_stride = conv_param['stride']
+        # print("filter_stride:", filter_stride)
+        # filter_stride: 1
+
         input_size = input_dim[1]
+        # print("input_size:", input_size)
+        # input_size: 28
+
         conv_output_size = (input_size - filter_size +
                             2 * filter_pad) / filter_stride + 1
+        # print("conv_output_size:", conv_output_size)
+        # conv_output_size: 24.0
+
         pool_output_size = int(filter_num * (conv_output_size / 2) *
                                (conv_output_size / 2))
+        # print("pool_output_size:", pool_output_size)
+        # pool_output_size: 4320
 
         # 初始化权重
         self.params = {}
@@ -57,6 +77,18 @@ class SimpleConvNet:
         self.params['W3'] = weight_init_std * \
                             np.random.randn(hidden_size, output_size)
         self.params['b3'] = np.zeros(output_size)
+        # print("self.params['W1']:", self.params['W1'].shape)
+        # self.params['W1']: (30, 1, 5, 5)
+        # print("self.params['b1']:", self.params['b1'].shape)
+        # self.params['b1']: (30,)
+        # print("self.params['W2']:", self.params['W2'].shape)
+        # self.params['W2']: (4320, 100)
+        # print("self.params['b2']:", self.params['b2'].shape)
+        # self.params['b2']: (100,)
+        # print("self.params['W3']:", self.params['W3'].shape)
+        # self.params['W3']: (100, 10)
+        # print("self.params['b3']:", self.params['b3'].shape)
+        # self.params['b3']: (10,)
 
         # 生成层
         self.layers = OrderedDict()
@@ -69,8 +101,21 @@ class SimpleConvNet:
         self.layers['Affine1'] = Affine(self.params['W2'], self.params['b2'])
         self.layers['Relu2'] = Relu()
         self.layers['Affine2'] = Affine(self.params['W3'], self.params['b3'])
+        # print(self.layers)
+        # OrderedDict(
+        #     [
+        #         ('Conv1', <common.layers.Convolution object at 0x7fda74bfd090>),
+        #         ('Relu1', <common.layers.Relu object at 0x7fda74bfd390>),
+        #         ('Pool1', <common.layers.Pooling object at 0x7fda74bfde70>),
+        #         ('Affine1', <common.layers.Affine object at 0x7fda74bfded0>),
+        #         ('Relu2', <common.layers.Relu object at 0x7fda74bfdf30>),
+        #         ('Affine2', <common.layers.Affine object at 0x7fda74bfe0e0>)
+        #     ]
+        # )
 
         self.last_layer = SoftmaxWithLoss()
+        # print(self.last_layer)
+        # <common.layers.SoftmaxWithLoss object at 0x7fda74bfe110>
 
     def predict(self, x):
         for layer in self.layers.values():
