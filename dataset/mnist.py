@@ -18,9 +18,12 @@ key_file = {
 }
 
 dataset_dir = os.path.dirname(os.path.abspath(__file__))
-print("dataset_dir:", dataset_dir)
+# print("dataset_dir:", dataset_dir)
+# dataset_dir: /workspaces/deep-learning-from-scratch/dataset
+
 save_file = dataset_dir + "/mnist.pkl"
-print("save_file:", save_file)
+# print("save_file:", save_file)
+# save_file: /workspaces/deep-learning-from-scratch/dataset/mnist.pkl
 
 train_num = 60000
 test_num = 10000
@@ -29,47 +32,57 @@ img_size = 784
 
 
 def _download(file_name):
-    print("_download begin")
-    print("_download file_name:", file_name)
+    # print("_download begin")
+    # print("_download file_name:", file_name)
+    # _download file_name: train-images-idx3-ubyte.gz
+    # _download file_name: train-labels-idx1-ubyte.gz
+    # _download file_name: t10k-images-idx3-ubyte.gz
+    # _download file_name: t10k-labels-idx1-ubyte.gz
     file_path = dataset_dir + "/" + file_name
-    print("_download file_path:", file_path)
+    # print("_download file_path:", file_path)
+    # _download file_path: /workspaces/deep-learning-from-scratch/dataset/train-images-idx3-ubyte.gz
+    # _download file_path: /workspaces/deep-learning-from-scratch/dataset/train-labels-idx1-ubyte.gz
+    # _download file_path: /workspaces/deep-learning-from-scratch/dataset/t10k-images-idx3-ubyte.gz
+    # _download file_path: /workspaces/deep-learning-from-scratch/dataset/t10k-labels-idx1-ubyte.gz
 
     if os.path.exists(file_path):
         return
 
     print("Downloading " + file_name + " ... ")
-    print("_download url_base + file_name:", url_base + file_name)
+    # print("_download url_base + file_name:", url_base + file_name)
+    # _download url_base + file_name: https://ossci-datasets.s3.amazonaws.com/mnist/train-images-idx3-ubyte.gz
+    # _download url_base + file_name: https://ossci-datasets.s3.amazonaws.com/mnist/train-labels-idx1-ubyte.gz
+    # _download url_base + file_name: https://ossci-datasets.s3.amazonaws.com/mnist/t10k-images-idx3-ubyte.gz
+    # _download url_base + file_name: https://ossci-datasets.s3.amazonaws.com/mnist/t10k-labels-idx1-ubyte.gz
     urllib.request.urlretrieve(url_base + file_name, file_path)
     print("Done")
-    print("_download end")
+    # print("_download end")
 
 
 def download_mnist():
-    print("download_mnist begin")
+    # print("download_mnist begin")
     for v in key_file.values():
-        print("download_mnist v:", v)
+        # print("download_mnist v:", v)
+        # download_mnist v: train-images-idx3-ubyte.gz
+        # download_mnist v: train-labels-idx1-ubyte.gz
+        # download_mnist v: t10k-images-idx3-ubyte.gz
+        # download_mnist v: t10k-labels-idx1-ubyte.gz
         _download(v)
-    print("download_mnist end")
+    # print("download_mnist end")
 
 
 def _load_label(file_name):
-    print("_load_label begin")
-    print("_load_label file_name:", file_name)
     file_path = dataset_dir + "/" + file_name
-    print("_load_label file_path:", file_path)
 
     print("Converting " + file_name + " to NumPy Array ...")
     with gzip.open(file_path, 'rb') as f:
         labels = np.frombuffer(f.read(), np.uint8, offset=8)
     print("Done")
-    print("_load_label end")
 
     return labels
 
 
 def _load_img(file_name):
-    print("_load_img begin")
-    print("_load_img file_name:", file_name)
     file_path = dataset_dir + "/" + file_name
     print("_load_img file_path:", file_path)
 
@@ -78,33 +91,45 @@ def _load_img(file_name):
         data = np.frombuffer(f.read(), np.uint8, offset=16)
     data = data.reshape(-1, img_size)
     print("Done")
-    print("_load_img end")
 
     return data
 
 
 def _convert_numpy():
-    print("_convert_numpy begin")
+    # print("_convert_numpy begin")
     dataset = {}
     dataset['train_img'] = _load_img(key_file['train_img'])
     dataset['train_label'] = _load_label(key_file['train_label'])
     dataset['test_img'] = _load_img(key_file['test_img'])
     dataset['test_label'] = _load_label(key_file['test_label'])
-    print("_convert_numpy dataset:", dataset)
-    print("_convert_numpy end")
+    # print("_convert_numpy dataset:", dataset)
+    # _convert_numpy dataset: {'train_img': array([[0, 0, 0, ..., 0, 0, 0],
+    #    [0, 0, 0, ..., 0, 0, 0],
+    #    [0, 0, 0, ..., 0, 0, 0],
+    #    ...,
+    #    [0, 0, 0, ..., 0, 0, 0],
+    #    [0, 0, 0, ..., 0, 0, 0],
+    #    [0, 0, 0, ..., 0, 0, 0]], dtype=uint8), 'train_label': array([5, 0, 4, ..., 5, 6, 8], dtype=uint8), 'test_img': array([[0, 0, 0, ..., 0, 0, 0],
+    #    [0, 0, 0, ..., 0, 0, 0],
+    #    [0, 0, 0, ..., 0, 0, 0],
+    #    ...,
+    #    [0, 0, 0, ..., 0, 0, 0],
+    #    [0, 0, 0, ..., 0, 0, 0],
+    #    [0, 0, 0, ..., 0, 0, 0]], dtype=uint8), 'test_label': array([7, 2, 1, ..., 4, 5, 6], dtype=uint8)}
+    # print("_convert_numpy end")
 
     return dataset
 
 
 def init_mnist():
-    print("init_mnist begin")
+    # print("init_mnist begin")
     download_mnist()
     dataset = _convert_numpy()
     print("Creating pickle file ...")
     with open(save_file, 'wb') as f:
         pickle.dump(dataset, f, -1)
     print("Done!")
-    print("init_mnist end")
+    # print("init_mnist end")
 
 
 def _change_one_hot_label(X):
