@@ -72,23 +72,64 @@ def download_mnist():
 
 
 def _load_label(file_name):
+    """
+    Converting train-labels-idx1-ubyte.gz to NumPy Array ...
+    labels: [5 0 4 ... 5 6 8]
+    labels: (60000,)
+
+    Converting t10k-labels-idx1-ubyte.gz to NumPy Array ...
+    labels: [7 2 1 ... 4 5 6]
+    labels: (10000,)
+    """
+
     file_path = dataset_dir + "/" + file_name
 
     print("Converting " + file_name + " to NumPy Array ...")
     with gzip.open(file_path, 'rb') as f:
         labels = np.frombuffer(f.read(), np.uint8, offset=8)
+        # print("labels:", labels)
+        # print("labels:", labels.shape)
     print("Done")
 
     return labels
 
 
 def _load_img(file_name):
+    """
+    Converting train-images-idx3-ubyte.gz to NumPy Array ...
+    data: [0 0 0 ... 0 0 0]
+    data: (47040000,)
+    data: [[0 0 0 ... 0 0 0]
+    [0 0 0 ... 0 0 0]
+    [0 0 0 ... 0 0 0]
+    ...
+    [0 0 0 ... 0 0 0]
+    [0 0 0 ... 0 0 0]
+    [0 0 0 ... 0 0 0]]
+    data: (60000, 784)
+
+    Converting t10k-images-idx3-ubyte.gz to NumPy Array ...
+    data: [0 0 0 ... 0 0 0]
+    data: (7840000,)
+    data: [[0 0 0 ... 0 0 0]
+    [0 0 0 ... 0 0 0]
+    [0 0 0 ... 0 0 0]
+    ...
+    [0 0 0 ... 0 0 0]
+    [0 0 0 ... 0 0 0]
+    [0 0 0 ... 0 0 0]]
+    data: (10000, 784)
+    """
     file_path = dataset_dir + "/" + file_name
 
     print("Converting " + file_name + " to NumPy Array ...")
     with gzip.open(file_path, 'rb') as f:
         data = np.frombuffer(f.read(), np.uint8, offset=16)
+        # print("data:", data)
+        # print("data:", data.shape)
     data = data.reshape(-1, img_size)
+    # print("data:", data)
+    # print("data:", data.shape)
     print("Done")
 
     return data
@@ -115,6 +156,14 @@ def _convert_numpy():
     #    [0, 0, 0, ..., 0, 0, 0],
     #    [0, 0, 0, ..., 0, 0, 0],
     #    [0, 0, 0, ..., 0, 0, 0]], dtype=uint8), 'test_label': array([7, 2, 1, ..., 4, 5, 6], dtype=uint8)}
+    # print("dataset['train_img']:", dataset['train_img'].shape)
+    # print("dataset['train_label']:", dataset['train_label'].shape)
+    # print("dataset['test_img']:", dataset['test_img'].shape)
+    # print("dataset['test_label']:", dataset['test_label'].shape)
+    # dataset['train_img']: (60000, 784)
+    # dataset['train_label']: (60000,)
+    # dataset['test_img']: (10000, 784)
+    # dataset['test_label']: (10000,)
     # print("_convert_numpy end")
 
     return dataset
@@ -132,7 +181,82 @@ def init_mnist():
 
 
 def _change_one_hot_label(X):
+    """
+    >>> import numpy as np
+    >>> X = np.array([2, 7, 9, 5, 5, 1, 3, 8, 6])
+    >>> X
+    array([2, 7, 9, 5, 5, 1, 3, 8, 6])
+    >>> X.shape
+    (9,)
+    >>> X.size
+    9
+    >>> T = np.zeros((X.size, 10))
+    >>> T
+    array([[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]])
+    >>> T.shape
+    (9, 10)
+    >>> T.size
+    90
+    >>> for idx, row in enumerate(T):
+    ...     print("idx:", idx)
+    ...     print("row:", row)
+    ...     row[X[idx]] = 1
+    ...     print("row:", row)
+    ...
+    idx: 0
+    row: [0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+    row: [0. 0. 1. 0. 0. 0. 0. 0. 0. 0.]
+    idx: 1
+    row: [0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+    row: [0. 0. 0. 0. 0. 0. 0. 1. 0. 0.]
+    idx: 2
+    row: [0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+    row: [0. 0. 0. 0. 0. 0. 0. 0. 0. 1.]
+    idx: 3
+    row: [0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+    row: [0. 0. 0. 0. 0. 1. 0. 0. 0. 0.]
+    idx: 4
+    row: [0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+    row: [0. 0. 0. 0. 0. 1. 0. 0. 0. 0.]
+    idx: 5
+    row: [0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+    row: [0. 1. 0. 0. 0. 0. 0. 0. 0. 0.]
+    idx: 6
+    row: [0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+    row: [0. 0. 0. 1. 0. 0. 0. 0. 0. 0.]
+    idx: 7
+    row: [0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+    row: [0. 0. 0. 0. 0. 0. 0. 0. 1. 0.]
+    idx: 8
+    row: [0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+    row: [0. 0. 0. 0. 0. 0. 1. 0. 0. 0.]
+    >>>
+    >>> T
+    array([[0., 0., 1., 0., 0., 0., 0., 0., 0., 0.],
+        [0., 0., 0., 0., 0., 0., 0., 1., 0., 0.],
+        [0., 0., 0., 0., 0., 0., 0., 0., 0., 1.],
+        [0., 0., 0., 0., 0., 1., 0., 0., 0., 0.],
+        [0., 0., 0., 0., 0., 1., 0., 0., 0., 0.],
+        [0., 1., 0., 0., 0., 0., 0., 0., 0., 0.],
+        [0., 0., 0., 1., 0., 0., 0., 0., 0., 0.],
+        [0., 0., 0., 0., 0., 0., 0., 0., 1., 0.],
+        [0., 0., 0., 0., 0., 0., 1., 0., 0., 0.]])
+    >>>
+    """
+
+    # print("X:", X.shape)  # X: (60000,)
+    # print("X:", X.size)  # X: 60000
     T = np.zeros((X.size, 10))
+    # print("T:", T.shape)  # T: (60000, 10)
+
     for idx, row in enumerate(T):
         row[X[idx]] = 1
 
@@ -159,19 +283,51 @@ def load_mnist(normalize=True, flatten=True, one_hot_label=False):
 
     with open(save_file, 'rb') as f:
         dataset = pickle.load(f)
+    # print("dataset['train_img']:", dataset['train_img'].shape)
+    # print("dataset['train_label']:", dataset['train_label'].shape)
+    # print("dataset['test_img']:", dataset['test_img'].shape)
+    # print("dataset['test_label']:", dataset['test_label'].shape)
+    # dataset['train_img']: (60000, 784)
+    # dataset['train_label']: (60000,)
+    # dataset['test_img']: (10000, 784)
+    # dataset['test_label']: (10000,)
 
     if normalize:
         for key in ('train_img', 'test_img'):
             dataset[key] = dataset[key].astype(np.float32)
             dataset[key] /= 255.0
+    # print("dataset['train_img']:", dataset['train_img'].shape)
+    # print("dataset['train_label']:", dataset['train_label'].shape)
+    # print("dataset['test_img']:", dataset['test_img'].shape)
+    # print("dataset['test_label']:", dataset['test_label'].shape)
+    # dataset['train_img']: (60000, 784)
+    # dataset['train_label']: (60000,)
+    # dataset['test_img']: (10000, 784)
+    # dataset['test_label']: (10000,)
 
     if one_hot_label:
         dataset['train_label'] = _change_one_hot_label(dataset['train_label'])
         dataset['test_label'] = _change_one_hot_label(dataset['test_label'])
+    # print("dataset['train_img']:", dataset['train_img'].shape)
+    # print("dataset['train_label']:", dataset['train_label'].shape)
+    # print("dataset['test_img']:", dataset['test_img'].shape)
+    # print("dataset['test_label']:", dataset['test_label'].shape)
+    # dataset['train_img']: (60000, 784)
+    # dataset['train_label']: (60000, 10)
+    # dataset['test_img']: (10000, 784)
+    # dataset['test_label']: (10000, 10)
 
     if not flatten:
         for key in ('train_img', 'test_img'):
             dataset[key] = dataset[key].reshape(-1, 1, 28, 28)
+    # print("dataset['train_img']:", dataset['train_img'].shape)
+    # print("dataset['train_label']:", dataset['train_label'].shape)
+    # print("dataset['test_img']:", dataset['test_img'].shape)
+    # print("dataset['test_label']:", dataset['test_label'].shape)
+    # dataset['train_img']: (60000, 1, 28, 28)
+    # dataset['train_label']: (60000, 10)
+    # dataset['test_img']: (10000, 1, 28, 28)
+    # dataset['test_label']: (10000, 10)
 
     return (dataset['train_img'],
             dataset['train_label']), (dataset['test_img'],
