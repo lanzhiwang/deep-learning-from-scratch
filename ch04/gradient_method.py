@@ -5,6 +5,7 @@ from gradient_2d import numerical_gradient
 
 
 def gradient_descent(f, init_x, lr=0.01, step_num=100):
+    """梯度下降法"""
     x = init_x
     x_history = []
 
