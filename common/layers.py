@@ -40,6 +40,7 @@ class Sigmoid:
 
 
 class Affine:
+    """矩阵的乘积"""
 
     def __init__(self, W, b):
         self.W = W
@@ -54,6 +55,19 @@ class Affine:
     def forward(self, x):
         # 对应张量
         self.original_x_shape = x.shape
+        """
+        >>> import numpy as np
+        >>> a = np.arange(18, 0, -1)
+        >>> a.shape
+        (18,)
+        >>> a = a.reshape(3, 2, 3)
+        >>> a.shape
+        (3, 2, 3)
+        >>> a = a.reshape(3, -1)
+        >>> a.shape
+        (3, 6)
+        >>>
+        """
         x = x.reshape(x.shape[0], -1)
         self.x = x
 

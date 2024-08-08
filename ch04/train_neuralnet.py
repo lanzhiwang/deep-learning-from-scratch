@@ -17,6 +17,7 @@ from two_layer_net import TwoLayerNet
 
 network = TwoLayerNet(input_size=784, hidden_size=50, output_size=10)
 
+# 超参数
 iters_num = 10000  # 适当设定循环的次数
 train_size = x_train.shape[0]  # 60000
 batch_size = 100
@@ -30,11 +31,12 @@ iter_per_epoch = max(train_size / batch_size, 1)
 # print("iter_per_epoch:", iter_per_epoch)  # iter_per_epoch: 600.0
 
 for i in range(iters_num):
-    # print("i:", i) 0 - 9999
+    # print("i:", i)  # 0 - 9999
     """
     >>> np.random.choice(60000, 10)
     array([ 8013, 14666, 58210, 23832, 52091, 10153, 8107, 19410, 27260, 21411])
     >>> np.random.choice(60000, 100)
+    从 60000 条数据中每次取出 100 条数据
     """
     batch_mask = np.random.choice(train_size, batch_size)
     x_batch = x_train[batch_mask]
