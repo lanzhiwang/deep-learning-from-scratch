@@ -27,10 +27,10 @@ for i in range(hidden_layer_size):
         x = activations[i - 1]
 
     # 改变初始值进行实验！
-    w = np.random.randn(node_num, node_num) * 1
-    # w = np.random.randn(node_num, node_num) * 0.01
-    # w = np.random.randn(node_num, node_num) * np.sqrt(1.0 / node_num)
-    # w = np.random.randn(node_num, node_num) * np.sqrt(2.0 / node_num)
+    w = np.random.randn(node_num, node_num) * 1  # 标准差为 1 的高斯分布
+    # w = np.random.randn(node_num, node_num) * 0.01  # # 标准差为 0.01 的高斯分布
+    # w = np.random.randn(node_num, node_num) * np.sqrt(1.0 / node_num)  # Xavier 初始值
+    # w = np.random.randn(node_num, node_num) * np.sqrt(2.0 / node_num)  # He 初始值
 
     a = np.dot(x, w)
 

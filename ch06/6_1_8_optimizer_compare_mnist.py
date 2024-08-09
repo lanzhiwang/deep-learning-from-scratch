@@ -11,8 +11,12 @@ from common.optimizer import *
 
 # 0:读入MNIST数据==========
 (x_train, t_train), (x_test, t_test) = load_mnist(normalize=True)
+# print("x_train:", x_train.shape)  # x_train: (60000, 784)
+# print("t_train:", t_train.shape)  # t_train: (60000,)
+# print("x_test:", x_test.shape)  # x_test: (10000, 784)
+# print("t_test:", t_test.shape)  # t_test: (10000,)
 
-train_size = x_train.shape[0]
+train_size = x_train.shape[0]  # 60000
 batch_size = 128
 max_iterations = 2000
 

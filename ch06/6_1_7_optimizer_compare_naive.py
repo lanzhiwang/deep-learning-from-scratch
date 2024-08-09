@@ -45,7 +45,25 @@ for key in optimizers:
 
     x = np.arange(-10, 10, 0.01)
     y = np.arange(-5, 5, 0.01)
-
+    """
+    >>> import numpy as np
+    >>> x = np.array([1, 2, 3, 4])
+    >>> x
+    array([1, 2, 3, 4])
+    >>> y = np.array([7, 6, 5])
+    >>> y
+    array([7, 6, 5])
+    >>> X, Y = np.meshgrid(x, y)
+    >>> X
+    array([[1, 2, 3, 4],
+           [1, 2, 3, 4],
+           [1, 2, 3, 4]])
+    >>> Y
+    array([[7, 7, 7, 7],
+           [6, 6, 6, 6],
+           [5, 5, 5, 5]])
+    >>>
+    """
     X, Y = np.meshgrid(x, y)
     Z = f(X, Y)
 
@@ -68,3 +86,4 @@ for key in optimizers:
     plt.ylabel("y")
 
 plt.show()
+plt.savefig('6_1_7_optimizer_compare_naive.png')

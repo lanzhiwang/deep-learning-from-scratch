@@ -3,7 +3,21 @@ import numpy as np
 
 
 class SGD:
-    """随机梯度下降法（Stochastic Gradient Descent）"""
+    """
+    随机梯度下降法(stochastic gradient descent)
+    简称 SGD
+
+    network = TwoLayerNet(...)
+    optimizer = SGD()
+    for i in range(10000):
+        ...
+        x_batch, t_batch = get_mini_batch(...) # mini-batch
+        grads = network.gradient(x_batch, t_batch)
+        params = network.params
+        optimizer.update(params, grads)
+        ...
+
+    """
 
     def __init__(self, lr=0.01):
         self.lr = lr
@@ -33,7 +47,10 @@ class Momentum:
 
 
 class Nesterov:
-    """Nesterov's Accelerated Gradient (http://arxiv.org/abs/1212.0901)"""
+    """
+    涅斯捷罗夫加速梯度
+    Nesterov's Accelerated Gradient (http://arxiv.org/abs/1212.0901)
+    """
 
     def __init__(self, lr=0.01, momentum=0.9):
         self.lr = lr
@@ -95,6 +112,11 @@ class Adam:
     """Adam (http://arxiv.org/abs/1412.6980v8)"""
 
     def __init__(self, lr=0.001, beta1=0.9, beta2=0.999):
+        """
+        Adam 会设置 3 个超参数.
+        一个是学习率(论文中以 α 出现), 另外两个是一次 momentum 系数 β1 和二次 momentum 系数 β2.
+        根据论文, 标准的设定值是 β1 为 0.9, β2 为 0.999。设置了这些值后，大多数情况下都能顺利运行.
+        """
         self.lr = lr
         self.beta1 = beta1
         self.beta2 = beta2
