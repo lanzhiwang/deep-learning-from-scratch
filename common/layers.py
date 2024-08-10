@@ -225,12 +225,17 @@ class BatchNormalization:
 class Convolution:
 
     def __init__(self, W, b, stride=1, pad=0):
-        self.W = W
-        self.b = b
-        self.stride = stride
-        self.pad = pad
+        """
+        卷积层的初始化方法将滤波器(权重)、偏置、步幅、填充作为参数接收.
+        滤波器是(FN, C, FH, FW)的 4 维形状.
+        另外, FN、C、FH、FW 分别是 Filter Number(滤波器数量)、Channel、Filter Height、Filter Width 的缩写.
+        """
+        self.W = W  # 卷积层的初始化方法将滤波器(权重)
+        self.b = b  # 偏置
+        self.stride = stride  # 步幅
+        self.pad = pad  # 填充
 
-        # 中间数据（backward时使用）
+        # 中间数据(backward 时使用)
         self.x = None
         self.col = None
         self.col_W = None
@@ -246,7 +251,7 @@ class Convolution:
         out_w = 1 + int((W + 2 * self.pad - FW) / self.stride)
 
         col = im2col(x, FH, FW, self.stride, self.pad)
-        col_W = self.W.reshape(FN, -1).T
+        col_W = self.W.reshape(FN, -1).T  # 滤波器的展开
 
         out = np.dot(col, col_W) + self.b
         out = out.reshape(N, out_h, out_w, -1).transpose(0, 3, 1, 2)
